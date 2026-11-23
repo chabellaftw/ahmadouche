@@ -859,47 +859,87 @@ J'espère avoir encore beaucoup d'anniversaires à te souhaiter (9ol Nchallah �
 
 /* LES DEUX CHANSONS */
 
+
+// ===================================
+// PLAYLIST
+// ===================================
+
 const songs = [
   {
     title: "Un son qui me fait penser à toi",
     artist: "Bilal Sghir",
     type: "youtube",
-    url: "https://www.youtube.com/watch?v=qIBHCZZVF4A&list=RDqIBHCZZVF4A&start_radio=1",
+    url: "COLLE_ICI_LE_LIEN_YOUTUBE_DE_BILAL_SGHIR",
     note: "Certaines chansons me rappellent directement toi."
   },
   {
     title: "Un son que j'écoute quand tu me manques",
     artist: "Mister You",
     type: "youtube",
-    url: "https://www.youtube.com/watch?v=vRGCFJRGrWs&list=RDvRGCFJRGrWs&start_radio=1",
+    url: "COLLE_ICI_LE_LIEN_YOUTUBE_DE_MISTER_YOU",
     note: "Même quand tu n'es pas là, il y a des choses qui me rapprochent de toi."
   }
 ];
+
+// ===================================
+// ELEMENTS HTML
+// ===================================
 
 const songList = document.getElementById("songList");
 const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
 const disc = document.getElementById("disc");
 
+// ===================================
+// EXTRAIRE L'IDENTIFIANT YOUTUBE
+// ===================================
+
 function youtubeId(url) {
   try {
-    const u = new URL(url);
-    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
-    if (u.hostname.includes("youtube.com")) {
-      return u.searchParams.get("v") ||
-        u.pathname.split("/embed/")[1] ||
-        null;
+    const link = new URL(url);
+
+    if (link.hostname === "youtu.be") {
+      return link.pathname.slice(1);
     }
-  } catch (e) {}
+
+    if (
+      link.hostname.includes("youtube.com") ||
+      link.hostname.includes("youtube-nocookie.com")
+    ) {
+      if (link.pathname === "/watch") {
+        return link.searchParams.get("v");
+      }
+
+      if (link.pathname.startsWith("/embed/")) {
+        return link.pathname.split("/embed/")[1].split("/")[0];
+      }
+
+      if (link.pathname.startsWith("/shorts/")) {
+        return link.pathname.split("/shorts/")[1].split("/")[0];
+      }
+    }
+  } catch (error) {
+    console.error("Lien YouTube invalide :", error);
+  }
+
   return null;
 }
 
-function playSong(index) {
-  const s = songs[index];
+// ===================================
+// LECTURE D'UNE CHANSON
+// ===================================
 
-  document.getElementById("currentTitle").textContent = s.title;
+function playSong(index) {
+  const song = songs[index];
+
+  if (!song) return;
+
+  const videoId = youtubeId(song.url);
+
+  document.getElementById("currentTitle").textContent = song.title;
+
   document.getElementById("currentMeta").textContent =
-    s.artist + (s.note ? " · " + s.note : "");
+    song.artist + (song.note ? " · " + song.note : "");
 
   nowPlaying.classList.add("playing");
   disc.classList.add("playing");
@@ -907,30 +947,78 @@ function playSong(index) {
   player.innerHTML = "";
   player.classList.add("visible");
 
-  const id = youtubeId(s.url);
+  if (!videoId) {
+    player.innerHTML =
+      '<p class="hint">Le lien YouTube est invalide. Vérifie le lien dans le tableau songs.</p>';
 
-  if (!id) {
-    player.textContent = "Lien YouTube invalide. Vérifie le lien.";
+    disc.classList.remove("playing");
+    nowPlaying.classList.remove("playing");
     return;
   }
 
   const iframe = document.createElement("iframe");
-  iframe.src = "https://www.youtube-nocookie.com/embed/" +
-    encodeURIComponent(id) + "?autoplay=1";
 
-  iframe.title = s.title;
-  iframe.allow = "autoplay; encrypted-media; picture-in-picture";
+  iframe.src =
+    "https://www.youtube.com/embed/" +
+    encodeURIComponent(videoId) +
+    "?autoplay=1&rel=0";
+
+  iframe.title = "Lecteur YouTube : " + song.title;
+
+  iframe.allow =
+    "autoplay; encrypted-media; picture-in-picture; fullscreen";
+
   iframe.allowFullscreen = true;
+  iframe.loading = "lazy";
+
   iframe.style.width = "100%";
   iframe.style.height = "200px";
-  iframe.style.border = "0";
+  iframe.style.border = "none";
+  iframe.style.borderRadius = "12px";
 
   player.appendChild(iframe);
 
-  document.querySelectorAll(".song button").forEach((b, i) => {
-    b.textContent = i === index ? "♫" : "▶";
+  // Mettre à jour les boutons
+  document.querySelectorAll(".song button").forEach((button, i) => {
+    button.textContent = i === index ? "♫" : "▶";
   });
 }
+
+// ===================================
+// AFFICHAGE DES CHANSONS
+// ===================================
+
+songList.innerHTML = "";
+
+songs.forEach((song, index) => {
+  const row = document.createElement("div");
+
+  row.className = "song";
+
+  row.innerHTML = `
+    <div class="song-num">
+      ${String(index + 1).padStart(2, "0")}
+    </div>
+
+    <div class="song-info">
+      <div class="song-name"></div>
+      <div class="song-artist"></div>
+    </div>
+
+    <button type="button" aria-label="Écouter ce morceau">
+      ▶
+    </button>
+  `;
+
+  row.querySelector(".song-name").textContent = song.title;
+  row.querySelector(".song-artist").textContent = song.artist;
+
+  row.querySelector("button").addEventListener("click", () => {
+    playSong(index);
+  });
+
+  songList.appendChild(row);
+});
 
 /* BOUTONS DES SECRETS */
 
