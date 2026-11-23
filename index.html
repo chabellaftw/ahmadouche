@@ -860,130 +860,104 @@ J'espère avoir encore beaucoup d'anniversaires à te souhaiter (9ol Nchallah �
 /* LES DEUX CHANSONS */
 
 const songs = [
-    {
-        title: "Un son qui me fait penser a toi",
-        artist: "Bilal Sghir",
-        file: "./bilalsentiment.mp3"
-    },
-    {
-        title: "Une chanson que j'ecoute quand tu me manque",
-        artist: "Mister You",
-        file: "./misteryouatoi.mp3"
-    }
+  {
+    title: "Un son qui me fait penser à toi",
+    artist: "Bilal Sghir",
+    type: "audio",
+    url: "./BILAL SGHIR - Sentiment Bizarre  Ø¨Ù_Ø§Ù_ Ø§Ù_ØµØºÙ_Ø±.mp3",
+    note: "Certaines chansons me rappellent directement toi."
+  },
+  {
+    title: "Un son que j'écoute quand tu me manques",
+    artist: "Mister You",
+    type: "audio",
+    url: "./Mister You - A Toi....mp3",
+    note: "Même quand tu n'es pas là, il y a des choses qui me rapprochent de toi."
+  }
 ];
 
 const songList = document.getElementById("songList");
 const player = document.getElementById("player");
+const nowPlaying = document.getElementById("nowPlaying");
 const disc = document.getElementById("disc");
 
 let currentAudio = null;
-let currentButton = null;
 
-function stopAudio() {
+function playSong(index) {
+  const s = songs[index];
+
+  document.getElementById("currentTitle").textContent = s.title;
+  document.getElementById("currentMeta").textContent =
+    s.artist + (s.note ? " · " + s.note : "");
+
+  nowPlaying.classList.add("playing");
+  disc.classList.add("playing");
+
+  // Arrêter la chanson précédente
   if (currentAudio) {
     currentAudio.pause();
-    currentAudio.removeAttribute("src");
-    currentAudio.load();
-    currentAudio = null;
+    currentAudio.currentTime = 0;
   }
 
-  if (currentButton) {
-    currentButton.textContent = "▶";
-    currentButton = null;
-  }
+  player.innerHTML = "";
+  player.classList.add("visible");
 
-  disc.classList.remove("playing");
-}
+  // Créer le lecteur MP3
+  currentAudio = document.createElement("audio");
+  currentAudio.controls = true;
+  currentAudio.autoplay = true;
+  currentAudio.preload = "metadata";
+  currentAudio.src = s.url;
+  currentAudio.style.width = "100%";
 
-function playSong(index, button) {
-  const song = songs[index];
-
-  stopAudio();
-
-  document.getElementById("currentTitle").textContent = song.title;
-  document.getElementById("currentMeta").textContent = song.artist;
-
-  player.replaceChildren();
-
-  const audio = document.createElement("audio");
-  audio.controls = true;
-  audio.preload = "metadata";
-  audio.src = song.url;
-
-  audio.addEventListener("playing", () => {
-    disc.classList.add("playing");
-    button.textContent = "♫";
-    document.getElementById("musicHint").textContent =
-      "Lecture en cours : " + song.title;
-  });
-
-  audio.addEventListener("pause", () => {
+  currentAudio.addEventListener("error", () => {
+    player.innerHTML =
+      '<p class="hint">Impossible de charger cette chanson. Vérifie le nom du fichier MP3 sur GitHub.</p>';
     disc.classList.remove("playing");
-    button.textContent = "▶";
+    nowPlaying.classList.remove("playing");
   });
 
-  audio.addEventListener("ended", () => {
+  currentAudio.addEventListener("ended", () => {
     disc.classList.remove("playing");
-    button.textContent = "▶";
+    nowPlaying.classList.remove("playing");
   });
 
-  audio.addEventListener("error", () => {
-    disc.classList.remove("playing");
-    button.textContent = "▶";
-    document.getElementById("musicHint").textContent =
-      "Impossible de lire ce fichier. Vérifie que le MP3 est bien présent sur GitHub : " + song.url;
+  player.appendChild(currentAudio);
+
+  currentAudio.play().catch(error => {
+    console.error("Erreur audio :", error);
+    // Le lecteur reste visible pour permettre de lancer
+    // la chanson manuellement.
   });
 
-  player.appendChild(audio);
-  currentAudio = audio;
-  currentButton = button;
-
-  document.getElementById("musicHint").textContent =
-    "Appuie sur Lecture pour écouter ce morceau.";
-
-  audio.play().catch(() => {
-    document.getElementById("musicHint").textContent =
-      "Le lecteur est prêt. Appuie sur Lecture.";
+  document.querySelectorAll(".song button").forEach((button, i) => {
+    button.textContent = i === index ? "♫" : "▶";
   });
 }
 
-function renderSongs() {
-  songList.replaceChildren();
+// Afficher les deux chansons
+songs.forEach((s, i) => {
+  const row = document.createElement("div");
+  row.className = "song";
 
-  songs.forEach((song, index) => {
-    const row = document.createElement("div");
-    row.className = "song";
+  row.innerHTML = `
+    <div class="song-num">${String(i + 1).padStart(2, "0")}</div>
+    <div>
+      <div class="song-name"></div>
+      <div class="song-artist"></div>
+    </div>
+    <button aria-label="Écouter ce morceau">▶</button>
+  `;
 
-    const number = document.createElement("div");
-    number.className = "song-num";
-    number.textContent = String(index + 1).padStart(2, "0");
+  row.querySelector(".song-name").textContent = s.title;
+  row.querySelector(".song-artist").textContent = s.artist;
 
-    const details = document.createElement("div");
-
-    const title = document.createElement("div");
-    title.className = "song-name";
-    title.textContent = song.title;
-
-    const artist = document.createElement("div");
-    artist.className = "song-artist";
-    artist.textContent = song.artist;
-
-    details.append(title, artist);
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = "▶";
-    button.setAttribute("aria-label", "Écouter " + song.title);
-
-    button.addEventListener("click", () => {
-      playSong(index, button);
-    });
-
-    row.append(number, details, button);
-    songList.appendChild(row);
+  row.querySelector("button").addEventListener("click", () => {
+    playSong(i);
   });
-}
 
+  songList.appendChild(row);
+});
 
 /* BOUTONS DES SECRETS */
 
@@ -1081,6 +1055,7 @@ updatePhoto();
 
 </body>
 </html>
+
 
 
 
