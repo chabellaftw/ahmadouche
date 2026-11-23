@@ -881,7 +881,18 @@ const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
 const disc = document.getElementById("disc");
 
-let currentAudio = null;
+function youtubeId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
+    if (u.hostname.includes("youtube.com")) {
+      return u.searchParams.get("v") ||
+        u.pathname.split("/embed/")[1] ||
+        null;
+    }
+  } catch (e) {}
+  return null;
+}
 
 function playSong(index) {
   const s = songs[index];
@@ -893,71 +904,33 @@ function playSong(index) {
   nowPlaying.classList.add("playing");
   disc.classList.add("playing");
 
-  // Arrêter la chanson précédente
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-  }
-
   player.innerHTML = "";
   player.classList.add("visible");
 
-  // Créer le lecteur MP3
-  currentAudio = document.createElement("audio");
-  currentAudio.controls = true;
-  currentAudio.autoplay = true;
-  currentAudio.preload = "metadata";
-  currentAudio.src = s.url;
-  currentAudio.style.width = "100%";
+  const id = youtubeId(s.url);
 
-  currentAudio.addEventListener("error", () => {
-    player.innerHTML =
-      '<p class="hint">Impossible de charger cette chanson. Vérifie le nom du fichier MP3 sur GitHub.</p>';
-    disc.classList.remove("playing");
-    nowPlaying.classList.remove("playing");
-  });
+  if (!id) {
+    player.textContent = "Lien YouTube invalide. Vérifie le lien.";
+    return;
+  }
 
-  currentAudio.addEventListener("ended", () => {
-    disc.classList.remove("playing");
-    nowPlaying.classList.remove("playing");
-  });
+  const iframe = document.createElement("iframe");
+  iframe.src = "https://www.youtube-nocookie.com/embed/" +
+    encodeURIComponent(id) + "?autoplay=1";
 
-  player.appendChild(currentAudio);
+  iframe.title = s.title;
+  iframe.allow = "autoplay; encrypted-media; picture-in-picture";
+  iframe.allowFullscreen = true;
+  iframe.style.width = "100%";
+  iframe.style.height = "200px";
+  iframe.style.border = "0";
 
-  currentAudio.play().catch(error => {
-    console.error("Erreur audio :", error);
-    // Le lecteur reste visible pour permettre de lancer
-    // la chanson manuellement.
-  });
+  player.appendChild(iframe);
 
-  document.querySelectorAll(".song button").forEach((button, i) => {
-    button.textContent = i === index ? "♫" : "▶";
+  document.querySelectorAll(".song button").forEach((b, i) => {
+    b.textContent = i === index ? "♫" : "▶";
   });
 }
-
-// Afficher les deux chansons
-songs.forEach((s, i) => {
-  const row = document.createElement("div");
-  row.className = "song";
-
-  row.innerHTML = `
-    <div class="song-num">${String(i + 1).padStart(2, "0")}</div>
-    <div>
-      <div class="song-name"></div>
-      <div class="song-artist"></div>
-    </div>
-    <button aria-label="Écouter ce morceau">▶</button>
-  `;
-
-  row.querySelector(".song-name").textContent = s.title;
-  row.querySelector(".song-artist").textContent = s.artist;
-
-  row.querySelector("button").addEventListener("click", () => {
-    playSong(i);
-  });
-
-  songList.appendChild(row);
-});
 
 /* BOUTONS DES SECRETS */
 
