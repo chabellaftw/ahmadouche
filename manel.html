@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#25070e">
+<title>un TRUC pour toi ♥</title>
+
+<style>
+:root {
+  --bg: #17060b;
+  --panel: rgba(55, 12, 25, .78);
+  --red: #e84b65;
+  --light-red: #ff8295;
+  --pink: #ffc1cc;
+  --white: #fff5f6;
+  --muted: #c9a4ad;
+  --line: rgba(255, 130, 149, .25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--white);
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(ellipse at 15% 15%, #581629 0, transparent 35%),
+    radial-gradient(ellipse at 85% 45%, #421020 0, transparent 35%),
+    linear-gradient(160deg, #17060b, #280914 55%, #100409);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  bottom: -40px;
+  color: #ff718a;
+  opacity: .35;
+  animation: floatHeart linear infinite;
+}
+
+@keyframes floatHeart {
+  from {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  15% { opacity: .4; }
+  to {
+    transform: translateY(-115vh) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+header, main, footer {
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  padding: 22px clamp(18px, 5vw, 70px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #ffffff10;
+}
+
+.brand {
+  font-size: 15px;
+  letter-spacing: .14em;
+  color: var(--pink);
+}
+
+.top-note {
+  font: 11px Arial, sans-serif;
+  color: var(--muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+main {
+  width: min(1000px, calc(100% - 32px));
+  margin: auto;
+}
+
+.hero {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 75px 12px 65px;
+  position: relative;
+}
+
+.moon {
+  font-size: 38px;
+  color: var(--light-red);
+  margin-bottom: 18px;
+  filter: drop-shadow(0 0 18px #ff526f);
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.13); }
+}
+
+.eyebrow, .kicker {
+  font: 10px Arial, sans-serif;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--light-red);
+}
+
+h1 {
+  font-size: clamp(45px, 9vw, 94px);
+  font-weight: 400;
+  line-height: .98;
+  letter-spacing: -.055em;
+  margin: 18px 0 24px;
+  text-shadow: 0 0 35px #e84b6535;
+}
+
+h1 span {
+  font-style: italic;
+  color: var(--pink);
+}
+
+.hero p {
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.8;
+  max-width: 550px;
+  color: #f0d6dc;
+  margin: 0 auto 30px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 21px;
+  border: 1px solid #ff82956b;
+  border-radius: 999px;
+  color: var(--white);
+  background: linear-gradient(120deg, #e84b6526, #ff82950c);
+  text-decoration: none;
+  font: 12px Arial, sans-serif;
+  letter-spacing: .08em;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  background: #e84b6535;
+}
+
+.scroll {
+  position: absolute;
+  bottom: 24px;
+  font: 10px Arial, sans-serif;
+  letter-spacing: .2em;
+  color: #c59aa5;
+}
+
+section {
+  padding: 48px 0 62px;
+  scroll-margin-top: 20px;
+}
+
+.section-head {
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: clamp(28px, 5vw, 43px);
+  font-weight: 400;
+  margin: 9px 0 8px;
+}
+
+.sub {
+  font: 14px/1.7 Arial, sans-serif;
+  color: var(--muted);
+  max-width: 650px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: clamp(20px, 4vw, 34px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 80px #0003;
+}
+
+/* MUSIQUE */
+
+.now-playing {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  background: #e84b6510;
+  border: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+
+.disc {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, #260711 0 13%, #ffb1c0 14% 17%, #6d1730 18% 40%, #e84b65 41% 44%, #280914 45%);
+  display: grid;
+  place-items: center;
+  animation: spin 8s linear infinite;
+  animation-play-state: paused;
+}
+
+.disc.playing {
+  animation-play-state: running;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.track-title {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.track-meta {
+  font: 12px Arial, sans-serif;
+  color: var(--muted);
+}
+
+.song-list {
+  display: grid;
+  gap: 10px;
+}
+
+.song {
+  display: grid;
+  grid-template-columns: 35px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 13px 14px;
+  border: 1px solid #ffffff12;
+  border-radius: 14px;
+  background: #17060b66;
+}
+
+.song-num {
+  font: 12px Arial, sans-serif;
+  color: var(--light-red);
+}
+
+.song-name {
+  font-size: 16px;
+}
+
+.song-artist {
+  font: 11px Arial, sans-serif;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.song button {
+  border: 1px solid #ff82956b;
+  background: #e84b6518;
+  color: var(--pink);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.player {
+  margin-top: 16px;
+}
+
+.player audio {
+  width: 100%;
+}
+
+.hint {
+  font: 12px/1.7 Arial, sans-serif;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+/* PHOTOS */
+
+.photo-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.photo-track {
+  display: flex;
+  transition: transform .55s ease;
+}
+
+.photo-slide {
+  min-width: 100%;
+  height: 430px;
+  position: relative;
+  overflow: hidden;
+  background: #3b1421;
+}
+
+.photo-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .8s ease, filter .5s ease;
+}
+
+.photo-slide:hover img,
+.photo-slide.revealed img {
+  transform: scale(1.045);
+  filter: brightness(.55);
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 35px;
+  background: linear-gradient(transparent 35%, #16050bd9);
+  opacity: 0;
+  transition: opacity .45s ease;
+  pointer-events: none;
+}
+
+.photo-slide:hover .photo-overlay,
+.photo-slide.revealed .photo-overlay {
+  opacity: 1;
+}
+
+.photo-overlay .reveal-label {
+  color: var(--light-red);
+  font: 10px Arial, sans-serif;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.photo-overlay p {
+  font-size: clamp(20px, 3vw, 29px);
+  line-height: 1.4;
+  margin: 0;
+  color: white;
+  max-width: 600px;
+}
+
+.photo-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 18px;
+}
+
+.photo-nav button {
+  background: #e84b6518;
+  border: 1px solid var(--line);
+  color: var(--pink);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.photo-counter {
+  font: 12px Arial, sans-serif;
+  color: var(--muted);
+  letter-spacing: .12em;
+}
+
+.photo-help {
+  text-align: center;
+  font: 11px Arial, sans-serif;
+  color: var(--muted);
+  margin-top: 15px;
+}
+
+/* SECRETS */
+
+.secret-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.secret {
+  min-height: 145px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 19px;
+  background: linear-gradient(145deg, #e84b6512, #ffffff03);
+  color: var(--white);
+  cursor: pointer;
+  transition: .25s;
+}
+
+.secret:hover {
+  transform: translateY(-4px);
+  border-color: var(--light-red);
+}
+
+.secret .lock {
+  font-size: 22px;
+  color: var(--light-red);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.secret strong {
+  font-weight: 400;
+  font-size: 17px;
+}
+
+.secret small {
+  display: block;
+  color: var(--muted);
+  font: 11px Arial, sans-serif;
+  margin-top: 9px;
+}
+
+.secret-content {
+  display: none;
+  margin-top: 14px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: #f5dce2;
+}
+
+.secret-content.open {
+  display: block;
+}
+
+/* SOUVENIRS */
+
+.memories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.memory {
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 20px;
+  background: #ffffff05;
+  min-height: 150px;
+}
+
+.memory .symbol {
+  font-size: 22px;
+  color: var(--light-red);
+}
+
+.memory h3 {
+  font-size: 19px;
+  font-weight: 400;
+  margin: 14px 0 8px;
+}
+
+.memory p {
+  font: 13px/1.7 Arial, sans-serif;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* LETTRE */
+
+.letter {
+  position: relative;
+  overflow: hidden;
+}
+
+.letter:after {
+  content: "♥";
+  position: absolute;
+  right: 24px;
+  top: 18px;
+  font-size: 70px;
+  color: #ff829514;
+  pointer-events: none;
+}
+
+.letter p {
+  font-size: 17px;
+  line-height: 1.95;
+  color: #f0dce2;
+  max-width: 700px;
+  white-space: pre-line;
+}
+
+.sign {
+  font-style: italic;
+  color: var(--pink);
+  font-size: 23px;
+  margin-top: 25px;
+}
+
+footer {
+  text-align: center;
+  padding: 38px 15px 48px;
+  color: #c09ba5;
+  font: 11px/1.8 Arial, sans-serif;
+  letter-spacing: .05em;
+}
+
+footer span {
+  color: var(--light-red);
+}
+
+@media(max-width:650px) {
+  .secret-grid, .memories {
+    grid-template-columns: 1fr;
+  }
+
+  .secret { min-height: 110px; }
+  .hero { min-height: 76vh; }
+  .top-note { display: none; }
+  header { padding: 18px; }
+  .panel { padding: 18px; }
+
+  .photo-slide {
+    height: 340px;
+  }
+
+  .photo-overlay {
+    padding: 22px;
+  }
+
+  .photo-overlay p {
+    font-size: 21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="hearts" aria-hidden="true"></div>
+
+<header>
+  <div class="brand">♥ UN PETIT UNIVERS</div>
+  <div class="top-note">quelque part entre mon cœur et toi</div>
+</header>
+
+<main>
+
+<!-- ACCUEIL -->
+
+<section class="hero" id="home">
+  <div class="moon">♥</div>
+  <div class="eyebrow">un lien, un secret, un peu de nous</div>
+
+  <h1>un <span>TRUC</span><br>pour toi.</h1>
+
+  <p>
+    Je ne savais pas trop comment mettre tout ce que je ressens dans un cadeau.
+    Alors j'ai essayé de le cacher dans un petit coin d'internet.
+  </p>
+
+  <a class="btn" href="#musique">Entre, c'est pour toi ♥</a>
+
+  <div class="scroll">FAIS DÉFILER DOUCEMENT ↓</div>
+</section>
+
+
+<!-- MUSIQUE -->
+
+<section id="musique">
+
+  <div class="section-head">
+    <div class="kicker">01 — notre bande-son</div>
+    <h2>Deux chansons. Un peu de nous.</h2>
+    <div class="sub">
+      Il y a des chansons qui ne sont plus juste des chansons.
+      Elles me rappellent toi, des moments, des sensations.
+    </div>
+  </div>
+
+  <div class="panel">
+
+    <div class="now-playing">
+      <div class="disc" id="disc">♥</div>
+
+      <div>
+        <div class="track-title" id="currentTitle">
+          La bande-son de mes pensées
+        </div>
+        <div class="track-meta" id="currentMeta">
+          Choisis un morceau juste en dessous
+        </div>
+      </div>
+    </div>
+
+    <div class="song-list" id="songList"></div>
+
+    <div class="player" id="player"></div>
+
+    <div class="hint" id="musicHint">
+      Deux morceaux que j'avais envie de te laisser.
+    </div>
+
+  </div>
+</section>
+
+
+<!-- PHOTOS -->
+
+<section id="photos">
+
+  <div class="section-head">
+    <div class="kicker">02 — quelques images, beaucoup de choses</div>
+    <h2>Ce que les photos ne racontent pas.</h2>
+    <div class="sub">
+      Certaines images gardent des choses qu'on ne voit pas au premier regard.
+      Passe ton curseur dessus, il y a peut-être quelque chose à découvrir.
+    </div>
+  </div>
+
+  <div class="panel">
+
+    <div class="photo-slider">
+
+      <div class="photo-track" id="photoTrack">
+
+        <!-- PHOTO 1 -->
+        <div class="photo-slide">
+          <img src="manel6.jpeg" alt="Un souvenir de nous">
+          <div class="photo-overlay">
+            <div class="reveal-label">Une petite révélation ♥</div>
+            <p>Ce jour je sais j’étais comme une folle hebeltk m3aya 😂😂😂limite je crois que tu as regretter ki jit</p>
+          </div>
+        </div>
+
+        <!-- PHOTO 2 -->
+        <div class="photo-slide">
+          <img src="manel5.jpeg" alt="Un autre souvenir">
+          <div class="photo-overlay">
+            <div class="reveal-label">Ce que tu ne sais pas</div>
+            <p>Mes toute premières roses 😘🤗</p>
+          </div>
+        </div>
+
+        <!-- PHOTO 3 -->
+        <div class="photo-slide">
+          <img src="manel4.jpeg" alt="Un moment à deux">
+          <div class="photo-overlay">
+            <div class="reveal-label">Entre nous</div>
+            <p>Endirais mon darron b ta position 😂</p>
+          </div>
+        </div>
+
+        <!-- PHOTO 4 -->
+        <div class="photo-slide">
+          <img src="WhatsApp Image 2026-11-17 at 18.03.47.jpeg" alt="Un souvenir précieux">
+          <div class="photo-overlay">
+            <div class="reveal-label">Une dernière chose</div>
+            <p>La journée que j’oublierai jamais ❤️☺️</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="photo-nav">
+      <button type="button" id="prevPhoto" aria-label="Photo précédente">←</button>
+      <span class="photo-counter" id="photoCounter">01 / 04</span>
+      <button type="button" id="nextPhoto" aria-label="Photo suivante">→</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECRETS -->
+
+<section id="secrets">
+
+  <div class="section-head">
+    <div class="kicker">03 — à ouvrir doucement</div>
+    <h2>Trois petits secrets.</h2>
+    <div class="sub">
+      Ce ne sont pas des énigmes. Juste des choses que je voulais te laisser découvrir à ton rythme.
+    </div>
+  </div>
+
+  <div class="secret-grid">
+
+    <button class="secret" type="button" data-secret="secret0">
+      <span class="lock">♥</span>
+      <strong>Ce que je veux faire avec toi</strong>
+      <small>appuie pour découvrir</small>
+    </button>
+
+    <button class="secret" type="button" data-secret="secret1">
+      <span class="lock">♡</span>
+      <strong>Mes sentiments pour toi</strong>
+      <small>appuie pour découvrir</small>
+    </button>
+
+    <button class="secret" type="button" data-secret="secret2">
+      <span class="lock">♥</span>
+      <strong>Ahmed a travers mes yeux</strong>
+      <small>appuie pour découvrir</small>
+    </button>
+
+  </div>
+
+  <div class="panel secret-content" id="secret0">
+    Depuis le jour où je suis tombée amoureuse de toi quelque chose a changé dans ma vie mes objectifs mes émotions mes sentiments et mes envies et même mes rêves ont pris une autre direction. (Hchemt 🙂‍↕️) 
+
+Aujourd’hui quand j’imagine mon avenir je ne peux pas m’empêcher de t’y voir mon cœur et mes pensées ont appris à imaginer la vie avec toi 
+
+Je vais t’avouer un petit secret : parmi toutes les belles choses que la vie peut nous offrir besah kayen bezaf swalah li manich bark haba n3ichhoum  ,bghit n3ichhoum m3ak NTA 
+
+Je veux voyager avec toi découvrir le monde visiter de nouveaux endroits apprendre de nouvelles choses nous cultiver et nous créer des souvenirs 
+
+Je veux faire de longs trajets avec toi de jour et comme de nuit ça tu le sais très bien c’est pas un secret 😇. Discuter pendant des heures de notre vie aaaa de notre passé de notre avenir de nos rêves ou même de sujets qui n’ont aucun sens Je veux qu’on puisse parler de tout et de rien sans jamais voir le temps passer en plus tu me connais nheb nehdar bark m3ak besah manich ha neskot 🙂‍↕️
+
+Et tu sais quoi ? Je veux aussi connaître ces moments win makach wache nehedrou ces moments de silence où je serai simplement à côté de toi …ma tête sur ton épaule…à sentir ton cœur battre (pour moi 🙂‍↕️) parce que parfois ta présence suffit à me rassurer et à me rendre heureuse 
+
+Je veux vivre avec toi des journées complètement folles tae lehbal bark rire jusqu’à en avoir mal au ventre nous taquiner…faire les enfants… (le bébé que tu es ) nous raconter des bêtises et être tellement à l’aise ensemble qu’on n’aura jamais besoin de faire semblant
+
+Je veux cuisiner avec toi préparer nos petits plats manger ensemble …faire les courses ..choisir les choses pour notre maison et même nous disputer pour savoir qui va faire la vaisselle🤓Je veux tous ces petits moments magnifiques qui deviennent extraordinaires quand ils sont partagés avec la bonne personne qui est TOIIII 
+
+Je veux aussi qu’on grandisse ensemble… Faire la prière à tes côtés…nous rapprocher de notre Créateur …. nous rappeler de faire le bien et construire une vie win rebi tkoun toujour plastou 
+
+Je veux te voir heureux avec ma famille dadi et papa surtout et être heureuse avec la tienne. Je veux qu’on puisse partager nos fêtes..nos repas..nos traditions 
+
+Et parmi tous mes rêves kayna haja qui occupe une place particulière dans mon cœur (nahchem n9olhalek fin nbeyenhalek) : je veux me marier avec toi Je veux construire notre propre famille, avoir notre petit monde, peut-être un jour entendre des petits pieds courir dans notre maison entendre le mot papa et mama voir nos enfants grandir et leur donner tout l’amour li balak hna ma3echnahch 
+
+Mais je ne veux pas seulement être à tes côtés lorsque tout va bien hada houwa sah 
+
+Je veux être là lorsque la vie sera difficile… lorsque tu seras 3eyan …lorsque tu douteras de toi ou lorsque tu auras l’impression que tout devient compliqué …. Je veux pouvoir te prendre dans mes bras et te rappeler que tu n’as pas besoin de tout porter tout seul ani m3ak ana 
+
+Je veux aussi que tu puisses poser ta tête sur moi comme un petit bébé et me raconter tout ce que tu as gardé au fond de ton cœur ( mon rêve 🫠)Tes blessures…tes souffrances…les choses qui t’ont fait pleurer….les moments où tu as été déçu f haja …mais aussi tes plus beaux souvenirs chwiya positifs 🫩Je veux t’écouter te comprendre et te donner cet espace win thes rohek libre tehdar wache hebit li fi 9elbek 3la lsanek je sais pas si 9oltha juste 🙃
+
+Je veux que tu partages avec moi tes réussites comme tes échecs et  tes joies comme tes tristesses et aussi Je veux être la personne avec qui tu célèbres tes victoires et celle vers qui tu peux revenir lorsque tu as besoin de reprendre des forces 
+
+Je veux te voir réussir réaliser tes ambitions …atteindre tes objectifs et devenir l’homme que tu rêves d’être…. Je veux être fière de toi je veux t’encourager dans tes projets et te voir accomplir de grandes choses. Je veux qu’on avance ensemble et qu’on réussisse ensemble et qu’on soit heureux de voir l’autre évoluer (putain )
+
+Je veux te voir toujours en bonne santé heureux et en paix avec toi-même d’abord … Je veux aussi te voir tet9areb men rebi sebhanou commencer ta prière et trouver cette tranquillité 
+
+Et là je vais être un peu égoïste : je veux ton amourrrrr ta fidélitéee ta loyauté et ta sincérité yakkkk ftah 3inik bien rak te9ra ?? Je veux qu’on se choisisse chaque jour et qu’on se protège et qu’on ne cesse jamais de prendre soin de notre amour ❤️
+
+Je veux être ta femme, ton amie, ta confidente, ton soutien . Je veux partager avec toi mes bonheurs et mes peurs(un peu 💀) et mes réussites, mes déceptions, mes journées magnifiques et même les moments win j’aime pas parler 
+
+Je ne rêve pas d’une vie parfaite wela mais je rêve d’une vie réelle avec TOI une vie avec des rires…des projets…des imprévus…des difficultés…des voyages…des souvenirs et surtout beaucoup d’amour j’adore moi
+
+BREFFFFFFFF🙂‍↔️😭
+
+Alors Ahmadouche a moi si tu pouvais m’offrir une seule chose ce serait de pouvoir vivre tous ces rêves à tes côtés me réaliser tous ça Pas forcément demain pas forcément tout de suite mais un jour nchallah avec de l’amour de la patience et Dieu à nos côtés biensur 
+
+Je veux bien commencer et terminer cette vie avec toi ❤️
+  </div>
+
+  <div class="panel secret-content" id="secret1">
+    Je ne regretterai jamais de t’avoir rencontré ahmadouche J’ai l’impression que depuis le jour où tu es entré dans ma vie tout est devenu plus beau plus joyeux plus rose tu as apaisé certaines de mes blessures et mes peurs aussi et changé beaucoup de mes pensées fin un peu 🙂‍↕️Je ne suis peut-être pas complètement guérie de tout mais je sais que depuis que je t’ai rencontré quelque chose en moi a changé ❤️
+Tu sais  je ne vois pas seulement Ahmed mon mec l’homme que j’aime je te vois aussi comme mon idole ma force et une véritable motivation dans ma vie 9othalek déjà même 
+Depuis notre rencontre j’ai toujours vu en toi une bonne personne quelqu’un avec un cœur pur et de belles intentions et tu sais quoi ? Même avant que tu commences ton business quand tu travaillais encore avec ton frère et tous j’étais déjà fière de toi Je l’étais hier❤️je le suis aujourd’hui ❤️et je le serai toujours❤️
+J’admire tellement la personne que tu es tu es un bosseur intelligent ambitieux toujours motivé et surtout courageux J’adore ta personnalité 💀ta façon d’être et ta manière de voir les choses c’est pour ça je te dis toujour nhesek kbir 3liya bezaf et malgré tout ce que tu as vécu tu as toujours trouvé la force d’avancer malgré ton enfance malgré certaines absences comme de ton papa tu as grandi tu t’es construit et tu es devenu un homme qui sait se débrouiller tout seul Kbert rajel f koulech 9dert 3la rohek Et je ne sais même pas si tu réalises à quel point je trouve ça admirable WOWWWW 
+Je suis tellement fière de toi❤️ Fière de t’avoir dans ma vie❤️ fière d’être à tes côtés et fière de pouvoir dire que cet homme là c’est toi à saikiiii 
+Tu as commencé un projet tu as galéré tu as connu des moments difficiles tu as pris des responsabilités très jeune tu vis seul tu assumes tes dépenses tu gères tes affaires et tu as appris à compter sur toi même tu n’as pas attendu que quelqu’un vienne tout faire à ta place de t’aider quoi tu as essayé tu as travaillé et tu as avancé avec tes propres moyens et par Allah si seulement tu pouvais voir à quel point je suis fière de toi aaaaaaaaaa tu es devenu un véritable exemple pour moi je t’admire pour ta force de caractère ton indépendance ton courage tu as construit quelque chose b walo et je trouve ça magnifique☺️ 
+Tu sais Ahmed depuis que je suis petite j’ai toujours dit que je voulais me marier avec quelqu’un qui me rappelle mon père sur certains swalah et quand je regarde ton parcours je retrouve parfois des ressemblances entre vous comme une enfance qui se ressemble sur certains points des caractères des chemins de vie et cette manière de se battre pour avancer putain endirais papa … ❤️
+Et si je t’ai aimé c’est aussi pour tout ce que tu es J’ai aimé ton cœur ta personnalité tes intentions ta gentillesse ton amour envers moi J’aime ta manière de me parler de me comprendre de me calmer et de me traiter…J’aime aussi les petites choses que tu fais et la façon dont tu arrives parfois à me rassurer et tous 
+Je sais que pour le moment tu ne peux pas forcément m’offrir beaucoup de choses..tu me fais pas sortir en s’offre pas de grande chose mais je comprends ta situation on est encore jeunes on a chacun notre chemin à construire et je crois en toi biensur je ne veux pas mesurer ton amour à ce que tu peux m’offrir matériellement aujourd’hui tu le sais très bien 
+Mais bon… les roses… ça reste obligatoire ! 🙂‍↕️🤗 Et les petits cadeaux…machi khsara 3liya quand même ! 🔪😂
+Je veux que tu saches une chose  je ne suis pas là uniquement pour profiter des beaux moments  je suis là aussi pour les jours où tu n’auras plus la force et pour les moments où tu douteras de toi pour les périodes où rien ne fonctionnera comme prévu …je suis là pour te soutenir pour croire en toi pour être derrière toi et pour te rappeler la personne que tu es lorsque toi même tu l’oublieras yakkk a minou !
+Tu pourras te reposer chez moi tu n’auras pas toujours besoin d’être fort avec moi tu auras aussi le droit d’être fatigué de douter de parler ou même de ne rien dire je veux être cette personne avec qui tu peux partager tous je ne suis pas la uniquement pour le positif je veux partager avec toi les hauts comme les bas les réussites comme les échecs aussi les beaux jours comme les jours plus compliqués je suis toujour la pour toi omri que tu es 
+Je sais que je ne suis pas toujours douée pour m’exprimer nehdar nehdar sache que ces messages ça fais 1 mois ana chaque jour nekteb j’écris je supprimer je modifie je rajoute 😂😂😂Parfois j’ai tellement de choses dans ma tête et dans mon cœur que je ne trouve même pas les mots pour les expliquer faut me comprendre Heinn mais si je devais te souhaiter quelque chose ce serait de réussir dans tout ce que tu entreprends c’est mon souhait vraiment ce que je te souhaite de tous mon ceour je te souhaite de la réussitede l’amour de l’argent de la tranquillité je souhaite te voir réussir avec ton beau business ta belle voiture ton argent ta propre maison et moi 🤗mais il y a une chose que je souhaite pour toi encore plus que tout ça  je souhaite te voir proche d’Alla Je souhaite te voir faire de ta prière une priorité avant tes projets ton travail ton argent et toutes les choses de cette vie yakk à mama Parce que la réussite bla slat c’est rien 
+
+Et si un jour tu arrives à réaliser tous tes rêves j’espère être là pour te regarder et me dire je savais kount rah tewsel J’ai toujours cru en lui minou à MOIIIII
+  </div>
+
+  <div class="panel secret-content" id="secret2">
+    Aujourd’hui on est le 19 novembre elle est 17:03🤓🤓rani chez mimi je t’écris là pour toi 
+Et maintenantttttttt la cerise sur le gâteau je  veux aussi te montrer comment je vois Ahmed quand il n’y a plus de business plus de responsabilités plus de travail et plus rien à gérer quand tu es simplement toi 
+Tu sais derrière cet homme li nmout 3lihhh je le  vois aussi comme un tout petit bébé😂❤️ Un homme tellement hninoucheeeee gentil ..mignon.. et parfois énerver je te déteste hakak je te le dis aaaaa mlih wahed ykoun direct 🏃🏻‍♀️🏃🏻‍♀️🏃🏻‍♀️🏃🏻‍♀️🏃🏻‍♀️
+
+J’aime cette partie de toi aussi j’aime quand tu laisses de côté toutes tes responsabilités et que tu redeviens simplement Ahmed celui qui peut être drôle qui fait des petites choses mignonnes 🙂‍↔️je ne veux pas seulement connaître l’homme fort qui sait tout gérer je veux aussi connaître celui qui peut être fatigué qui a besoin d’attention et parfois même d’être chouchouté🤗🤗🤗😘😘😘😘parceque pour moi tu n’as pas besoin d’être toujours fort toujours sérieux ou toujours occupé 💀Tu peux simplement être toi-même m3aya
+J’aime bien prendre soin de mon petit bébé 🤓
+Je veux aimer toutes tes facettes meme tes petits défauts et le côtés que tu ne montres pas à tout le monde
+M3aya tu n’es pas obligé d’être l’homme qui porte toutes les responsabilités du monde yak tu as aussi le droit d’être mon petit bébé mon chouchou mon doudou 🥺❤️
+  </div>
+
+</section>
+
+<!-- LETTRE -->
+
+<section id="lettre">
+
+  <div class="section-head">
+    <div class="kicker">05 — la dernière page</div>
+    <h2>Une lettre, juste pour toi.</h2>
+  </div>
+
+  <div class="panel letter">
+
+    <p>
+Joyeux anniversaire mon amoureux❤️
+Je te souhaite une année remplie de bonheur de réussite de santé et de belles surprises Nchallah Qu’Allah protège et yhe9e9lek gae wache tmenit 
+J'espère avoir encore beaucoup d'anniversaires à te souhaiter (9ol Nchallah 🔪)et surtout beaucoup de rêves à voir se réaliser à tes côtés Nchallah ya rebi ❤️
+
+    <div class="sign">
+      — à toi, avec tout ce que je n'arrive pas toujours à dire. ♥
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  fait avec soin, un peu de rouge et beaucoup de pensées pour toi
+  <span>♥</span><br>
+  ce petit univers est à toi, chaque fois que tu en as besoin.
+</footer>
+
+
+<script>
+"use strict";
+
+/* LES DEUX CHANSONS */
+
+const songs = [
+  {
+    title: "Un son qui me fait penser à toi",
+    artist: "John Denver",
+    url: "John Denver - Take Me Home, Country Roads (Lyrics).mp3"
+  },
+  {
+    title: "Un son que j'écoute quand je pense à toi la nuit",
+    artist: "Cigarettes After Sex",
+    url: "Cigarettes After Sex - Apocalypse (Lyrics).mp3"
+  }
+];
+
+const songList = document.getElementById("songList");
+const player = document.getElementById("player");
+const disc = document.getElementById("disc");
+
+let currentAudio = null;
+let currentButton = null;
+
+function stopAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.removeAttribute("src");
+    currentAudio.load();
+    currentAudio = null;
+  }
+
+  if (currentButton) {
+    currentButton.textContent = "▶";
+    currentButton = null;
+  }
+
+  disc.classList.remove("playing");
+}
+
+function playSong(index, button) {
+  const song = songs[index];
+
+  stopAudio();
+
+  document.getElementById("currentTitle").textContent = song.title;
+  document.getElementById("currentMeta").textContent = song.artist;
+
+  player.replaceChildren();
+
+  const audio = document.createElement("audio");
+  audio.controls = true;
+  audio.preload = "metadata";
+  audio.src = song.url;
+
+  audio.addEventListener("playing", () => {
+    disc.classList.add("playing");
+    button.textContent = "♫";
+    document.getElementById("musicHint").textContent =
+      "Lecture en cours : " + song.title;
+  });
+
+  audio.addEventListener("pause", () => {
+    disc.classList.remove("playing");
+    button.textContent = "▶";
+  });
+
+  audio.addEventListener("ended", () => {
+    disc.classList.remove("playing");
+    button.textContent = "▶";
+  });
+
+  audio.addEventListener("error", () => {
+    disc.classList.remove("playing");
+    button.textContent = "▶";
+    document.getElementById("musicHint").textContent =
+      "Impossible de lire ce fichier. Vérifie que le MP3 est bien présent sur GitHub : " + song.url;
+  });
+
+  player.appendChild(audio);
+  currentAudio = audio;
+  currentButton = button;
+
+  document.getElementById("musicHint").textContent =
+    "Appuie sur Lecture pour écouter ce morceau.";
+
+  audio.play().catch(() => {
+    document.getElementById("musicHint").textContent =
+      "Le lecteur est prêt. Appuie sur Lecture.";
+  });
+}
+
+function renderSongs() {
+  songList.replaceChildren();
+
+  songs.forEach((song, index) => {
+    const row = document.createElement("div");
+    row.className = "song";
+
+    const number = document.createElement("div");
+    number.className = "song-num";
+    number.textContent = String(index + 1).padStart(2, "0");
+
+    const details = document.createElement("div");
+
+    const title = document.createElement("div");
+    title.className = "song-name";
+    title.textContent = song.title;
+
+    const artist = document.createElement("div");
+    artist.className = "song-artist";
+    artist.textContent = song.artist;
+
+    details.append(title, artist);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "▶";
+    button.setAttribute("aria-label", "Écouter " + song.title);
+
+    button.addEventListener("click", () => {
+      playSong(index, button);
+    });
+
+    row.append(number, details, button);
+    songList.appendChild(row);
+  });
+}
+
+
+/* BOUTONS DES SECRETS */
+
+document.querySelectorAll("[data-secret]").forEach(button => {
+  button.addEventListener("click", () => {
+    const target = document.getElementById(button.dataset.secret);
+    if (!target) return;
+
+    const isOpen = target.classList.toggle("open");
+    const hint = button.querySelector("small");
+
+    if (hint) {
+      hint.textContent = isOpen
+        ? "appuie pour refermer"
+        : "appuie pour découvrir";
+    }
+  });
+});
+
+
+/* DIAPORAMA PHOTOS */
+
+const photoTrack = document.getElementById("photoTrack");
+const photoSlides = document.querySelectorAll(".photo-slide");
+const photoCounter = document.getElementById("photoCounter");
+
+let currentPhoto = 0;
+
+function updatePhoto() {
+  photoTrack.style.transform =
+    "translateX(-" + currentPhoto * 100 + "%)";
+
+  photoCounter.textContent =
+    String(currentPhoto + 1).padStart(2, "0") +
+    " / " +
+    String(photoSlides.length).padStart(2, "0");
+
+  photoSlides.forEach(slide => {
+    slide.classList.remove("revealed");
+  });
+}
+
+document.getElementById("prevPhoto").addEventListener("click", () => {
+  currentPhoto =
+    (currentPhoto - 1 + photoSlides.length) % photoSlides.length;
+
+  updatePhoto();
+});
+
+document.getElementById("nextPhoto").addEventListener("click", () => {
+  currentPhoto = (currentPhoto + 1) % photoSlides.length;
+  updatePhoto();
+});
+
+/* Sur téléphone, toucher la photo révèle son message. */
+
+photoSlides.forEach(slide => {
+  slide.addEventListener("click", () => {
+    slide.classList.toggle("revealed");
+  });
+});
+
+
+/* COEURS FLOTTANTS */
+
+function createHearts() {
+  const container = document.getElementById("hearts");
+
+  const symbols = ["♥", "♡", "❤"];
+
+  for (let i = 0; i < 28; i++) {
+    const heart = document.createElement("span");
+
+    heart.className = "heart";
+    heart.textContent =
+      symbols[Math.floor(Math.random() * symbols.length)];
+
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize = (Math.random() * 17 + 10) + "px";
+    heart.style.animationDuration = (Math.random() * 13 + 10) + "s";
+    heart.style.animationDelay = (Math.random() * 15) + "s";
+
+    container.appendChild(heart);
+  }
+}
+
+
+/* LANCEMENT */
+
+renderSongs();
+createHearts();
+updatePhoto();
+
+</script>
+
+</body>
+</html>
