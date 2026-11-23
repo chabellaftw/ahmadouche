@@ -857,167 +857,43 @@ J'espère avoir encore beaucoup d'anniversaires à te souhaiter (9ol Nchallah �
 <script>
 "use strict";
 
-/* LES DEUX CHANSONS */
-
-
-// ===================================
-// PLAYLIST
-// ===================================
-
 const songs = [
-  {
-    title: "Un son qui me fait penser à toi",
-    artist: "Bilal Sghir",
-    type: "youtube",
-    url: "COLLE_ICI_LE_LIEN_YOUTUBE_DE_BILAL_SGHIR",
-    note: "Certaines chansons me rappellent directement toi."
-  },
-  {
-    title: "Un son que j'écoute quand tu me manques",
-    artist: "Mister You",
-    type: "youtube",
-    url: "COLLE_ICI_LE_LIEN_YOUTUBE_DE_MISTER_YOU",
-    note: "Même quand tu n'es pas là, il y a des choses qui me rapprochent de toi."
-  }
+  { title: "La deuxième chanson", artist: "Nom de l'artiste", type: "spotify", url: "https://open.spotify.com/track/REMPLACE_PAR_TON_LIEN", note: "Un petit souvenir ou une sensation liée à ce morceau." },
+  { title: "Un morceau rien qu'à nous", artist: "Nom de l'artiste", type: "youtube", url: "https://www.youtube.com/watch?v=VIDEO_ID", note: "Ce que j'aimerais que tu ressentes en l'écoutant." }
 ];
-
-// ===================================
-// ELEMENTS HTML
-// ===================================
 
 const songList = document.getElementById("songList");
 const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
 const disc = document.getElementById("disc");
-
-// ===================================
-// EXTRAIRE L'IDENTIFIANT YOUTUBE
-// ===================================
-
-function youtubeId(url) {
-  try {
-    const link = new URL(url);
-
-    if (link.hostname === "youtu.be") {
-      return link.pathname.slice(1);
-    }
-
-    if (
-      link.hostname.includes("youtube.com") ||
-      link.hostname.includes("youtube-nocookie.com")
-    ) {
-      if (link.pathname === "/watch") {
-        return link.searchParams.get("v");
-      }
-
-      if (link.pathname.startsWith("/embed/")) {
-        return link.pathname.split("/embed/")[1].split("/")[0];
-      }
-
-      if (link.pathname.startsWith("/shorts/")) {
-        return link.pathname.split("/shorts/")[1].split("/")[0];
-      }
-    }
-  } catch (error) {
-    console.error("Lien YouTube invalide :", error);
-  }
-
-  return null;
+function youtubeId(url){
+  try { const u = new URL(url); if(u.hostname.includes("youtu.be")) return u.pathname.slice(1); if(u.hostname.includes("youtube.com")) return u.searchParams.get("v") || (u.pathname.includes("/embed/") ? u.pathname.split("/embed/")[1] : null); } catch(e){} return null;
 }
-
-// ===================================
-// LECTURE D'UNE CHANSON
-// ===================================
-
-function playSong(index) {
-  const song = songs[index];
-
-  if (!song) return;
-
-  const videoId = youtubeId(song.url);
-
-  document.getElementById("currentTitle").textContent = song.title;
-
-  document.getElementById("currentMeta").textContent =
-    song.artist + (song.note ? " · " + song.note : "");
-
-  nowPlaying.classList.add("playing");
-  disc.classList.add("playing");
-
-  player.innerHTML = "";
-  player.classList.add("visible");
-
-  if (!videoId) {
-    player.innerHTML =
-      '<p class="hint">Le lien YouTube est invalide. Vérifie le lien dans le tableau songs.</p>';
-
-    disc.classList.remove("playing");
-    nowPlaying.classList.remove("playing");
-    return;
+function playSong(index){
+  const s=songs[index];
+  document.getElementById("currentTitle").textContent=s.title;
+  document.getElementById("currentMeta").textContent=s.artist + (s.note ? " · " + s.note : "");
+  nowPlaying.classList.add("playing"); disc.classList.add("playing");
+  player.innerHTML=""; player.classList.add("visible");
+  if(s.type==="youtube"){
+    const id=youtubeId(s.url);
+    if(id && id!=="VIDEO_ID"){
+      const iframe=document.createElement("iframe"); iframe.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(id)+"?autoplay=1"; iframe.title="Lecteur YouTube : "+s.title; iframe.allow="autoplay; encrypted-media; picture-in-picture"; iframe.allowFullscreen=true; player.appendChild(iframe);
+    } else { player.innerHTML='<p class="hint">Ajoute le vrai lien YouTube dans le tableau <code>songs</code> du fichier index.html pour écouter ce morceau ici.</p>'; }
+  } else if(s.type==="spotify"){
+    const match=s.url.match(/open\.spotify\.com\/(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
+    if(match){const iframe=document.createElement("iframe"); iframe.src="https://open.spotify.com/embed/"+match[1]+"/"+match[2]+"?utm_source=generator"; iframe.title="Lecteur Spotify : "+s.title; iframe.allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"; iframe.style.height="152px"; player.appendChild(iframe);}
+    else player.innerHTML='<p class="hint">Ajoute un lien Spotify valide dans le tableau <code>songs</code> du fichier index.html.</p>';
+  } else if(s.type==="audio"){
+    const audio=document.createElement("audio"); audio.controls=true; audio.autoplay=true; audio.src=s.url; player.appendChild(audio);
   }
-
-  const iframe = document.createElement("iframe");
-
-  iframe.src =
-    "https://www.youtube.com/embed/" +
-    encodeURIComponent(videoId) +
-    "?autoplay=1&rel=0";
-
-  iframe.title = "Lecteur YouTube : " + song.title;
-
-  iframe.allow =
-    "autoplay; encrypted-media; picture-in-picture; fullscreen";
-
-  iframe.allowFullscreen = true;
-  iframe.loading = "lazy";
-
-  iframe.style.width = "100%";
-  iframe.style.height = "200px";
-  iframe.style.border = "none";
-  iframe.style.borderRadius = "12px";
-
-  player.appendChild(iframe);
-
-  // Mettre à jour les boutons
-  document.querySelectorAll(".song button").forEach((button, i) => {
-    button.textContent = i === index ? "♫" : "▶";
-  });
+  document.querySelectorAll(".song button").forEach((b,i)=>b.textContent=i===index?"♫":"▶");
 }
-
-// ===================================
-// AFFICHAGE DES CHANSONS
-// ===================================
-
-songList.innerHTML = "";
-
-songs.forEach((song, index) => {
-  const row = document.createElement("div");
-
-  row.className = "song";
-
-  row.innerHTML = `
-    <div class="song-num">
-      ${String(index + 1).padStart(2, "0")}
-    </div>
-
-    <div class="song-info">
-      <div class="song-name"></div>
-      <div class="song-artist"></div>
-    </div>
-
-    <button type="button" aria-label="Écouter ce morceau">
-      ▶
-    </button>
-  `;
-
-  row.querySelector(".song-name").textContent = song.title;
-  row.querySelector(".song-artist").textContent = song.artist;
-
-  row.querySelector("button").addEventListener("click", () => {
-    playSong(index);
-  });
-
-  songList.appendChild(row);
+songs.forEach((s,i)=>{
+  const row=document.createElement("div"); row.className="song";
+  row.innerHTML='<div class="song-num">'+String(i+1).padStart(2,"0")+'</div><div><div class="song-name"></div><div class="song-artist"></div></div><button aria-label="Écouter ce morceau">▶</button>';
+  row.querySelector(".song-name").textContent=s.title; row.querySelector(".song-artist").textContent=s.artist;
+  row.querySelector("button").addEventListener("click",()=>playSong(i)); songList.appendChild(row);
 });
 
 /* BOUTONS DES SECRETS */
